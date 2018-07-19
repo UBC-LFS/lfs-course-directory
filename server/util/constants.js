@@ -10,7 +10,7 @@ const buildURL = (year, term, dept) => {
   const Dept = setDept(dept)
   return `${baseURL}&${Year}&${Term}&req=2&${Dept}&output=3`
 }
-export {
+module.exports = {
   buildURL,
   LFSDepts
 }

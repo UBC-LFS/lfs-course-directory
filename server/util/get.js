@@ -3,6 +3,6 @@ const getYear = () => {
   return date.getFullYear()
 }
 
-export {
+module.exports = {
   getYear
 }
