@@ -13,7 +13,6 @@ const getCoursesInDept = async (dept, term) => {
     .then(res => res.text())
     .then(x => xljs.xml2js(x))
   const courses = Array.isArray(json.courses.course) ? json.courses.course : [json.courses.course]
-  console.log(courses.map(({ _key, _title }) => ({ course: _key, description: _title })))
   return courses.map(({ _key, _title }) => ({ course: _key, description: _title }))
 }
 
