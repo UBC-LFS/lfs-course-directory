@@ -14,10 +14,9 @@ const getCoursesInDept = async (year, dept, term) => {
   return courses.map(({ _key, _title }) => ({ course: _key, description: _title, dept }))
 }
 
-const getCoursesInTerm = async (year, term) => {
-  return Promise.all(
+const getCoursesInTerm = async (year, term) =>
+  Promise.all(
     LFSDepts.map(dept => getCoursesInDept(year, dept, term))
   )
-}
 
 module.exports = getCoursesInTerm
