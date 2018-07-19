@@ -1,8 +1,6 @@
 import React, { Component } from 'react'
 import logo from './logo.svg'
 import './App.css'
-// import { LFSDepts, buildURL } from './util/constants'
-// import { getYear } from './util/get'
 
 class App extends Component {
   constructor(props) {

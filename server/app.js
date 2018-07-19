@@ -16,8 +16,8 @@ app.get('/:term', async ({ params: { term } }, res) => {
   const pathToFile = path.join(__dirname, `courseFiles/${year}${term}.JSON`)
   const exists = await fs.pathExists(pathToFile)
   if (exists) {
-    const json = await fs.readJson(pathToFile)
-    res.send(json)
+    const courses = await fs.readJson(pathToFile)
+    res.send(courses)
   } else {
     const courses = await getCoursesInTerm(year, term)
     res.send(courses)
