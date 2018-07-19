@@ -1,14 +1,12 @@
 /* global fetch */
 
 require('isomorphic-fetch')
-const { getYear } = require('./util/get')
 const { LFSDepts, buildURL } = require('./util/constants')
 const XLJS = require('x2js')
 
 const xljs = new XLJS()
 
-const getCoursesInDept = async (dept, term) => {
-  const year = getYear()
+const getCoursesInDept = async (year, dept, term) => {
   const json = await fetch(buildURL(year, term, dept))
     .then(res => res.text())
     .then(x => xljs.xml2js(x))
@@ -16,9 +14,9 @@ const getCoursesInDept = async (dept, term) => {
   return courses.map(({ _key, _title }) => ({ course: _key, description: _title, dept }))
 }
 
-const getCoursesInTerm = async (term) => {
+const getCoursesInTerm = async (year, term) => {
   return Promise.all(
-    LFSDepts.map(dept => getCoursesInDept(dept, term))
+    LFSDepts.map(dept => getCoursesInDept(year, dept, term))
   )
 }
 
