@@ -14,9 +14,7 @@ class App extends Component {
   }
 
   componentDidMount () {
-    fetch('http://localhost:8081/')
-      .then(x => x.json())
-      .then(x => console.log(x))
+    this.getCoursesForTerm(this.state.activeTerm)
   }
 
   getCoursesForTerm = async (term) => {

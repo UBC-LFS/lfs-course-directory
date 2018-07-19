@@ -1,5 +1,5 @@
 const express = require('express')
-const { getCoursesInDept } = require('./getCourses')
+const getCoursesInTerm = require('./getCoursesInTerm')
 
 const app = express()
 
@@ -10,11 +10,11 @@ app.use((req, res, next) => {
 })
 
 app.get('/W', (req, res) => {
-  getCoursesInDept('APBI', 'W').then(x => res.send(x))
+  getCoursesInTerm('W').then(x => res.send(x))
 })
 
 app.get('/S', (req, res) => {
-  getCoursesInDept('APBI', 'W').then(x => res.send(x))
+  getCoursesInTerm('S').then(x => res.send(x))
 })
 
 module.exports = app
