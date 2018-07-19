@@ -8,7 +8,6 @@ class App extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      depts: [],
       courses: [],
       activeTerm: 'W'
     }
@@ -18,6 +17,14 @@ class App extends Component {
     fetch('http://localhost:8081/')
       .then(x => x.json())
       .then(x => console.log(x))
+  }
+
+  getCoursesForTerm = async (term) => {
+    const courses = await fetch(`http://localhost:8081/${term}`)
+      .then(x => x.json())
+    this.setState({
+      courses: courses
+    })
   }
 
   render () {

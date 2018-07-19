@@ -9,7 +9,11 @@ app.use((req, res, next) => {
   next()
 })
 
-app.get('/', (req, res) => {
+app.get('/W', (req, res) => {
+  getCoursesInDept('APBI', 'W').then(x => res.send(x))
+})
+
+app.get('/S', (req, res) => {
   getCoursesInDept('APBI', 'W').then(x => res.send(x))
 })
 
