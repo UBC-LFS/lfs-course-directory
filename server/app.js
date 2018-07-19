@@ -20,7 +20,8 @@ app.get('/:term', async ({ params: { term } }, res) => {
     res.send(json)
   } else {
     const courses = await getCoursesInTerm(year, term)
-    await fs.writeJson(pathToFile, courses)
+    res.send(courses)
+    fs.writeJson(pathToFile, courses)
   }
 })
 
