@@ -3,6 +3,7 @@ import React from 'react'
 import { Grid, Row, Col, FormControl } from 'react-bootstrap';
 import 'react-dropdown/style.css'
 import './App.css'
+import ToggleButton from 'react-toggle-button'
 import ResultsTable from './ResultsTable'
 
 class App extends React.Component {
@@ -33,7 +34,18 @@ class App extends React.Component {
           <Col>
             <h2>Course Directory</h2>
           </Col>
+          <Col><ToggleButton
+            inactiveLabel={this.state.activeTerm}
+            activeLabel={'S'}
+            value={this.state.value}
+            onToggle={(value) => {
+              this.setState({
+                value: !value,
+              })
+            }} />
+          </Col>
         </Row>
+        <Row><br /></Row>
         <Row>
           <FormControl type="text" inputRef={el => this.searchbar = el} onChange={this.handleSearchInputUpdate} 
             placeholder="Search a course code... (ex: FNH200)">
