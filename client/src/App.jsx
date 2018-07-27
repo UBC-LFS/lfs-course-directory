@@ -5,6 +5,7 @@ import 'react-dropdown/style.css'
 import './App.css'
 import ToggleButton from 'react-toggle-button'
 import ResultsTable from './ResultsTable'
+import {exampleInput} from './input'
 
 class App extends React.Component {
   constructor (props) {
@@ -20,10 +21,11 @@ class App extends React.Component {
   }
 
   getCoursesForTerm = async (term) => {
-    const courses = await fetch(`http://localhost:8081/${term}`)
-    .then(x => x.json())
+    // const courses = await fetch(`http://localhost:8081/${term}`)
+    // .then(x => x.json())
+    
     this.setState({
-      courses: courses
+      courses: exampleInput
     })
   }
 

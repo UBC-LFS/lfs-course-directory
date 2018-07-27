@@ -7,7 +7,7 @@ import { Table } from 'react-bootstrap'
 */
 
 class ResultsTable extends React.Component {
-  render () {
+  render() {
     return (
       <Table striped bordered hover>
         <thead>
@@ -20,19 +20,25 @@ class ResultsTable extends React.Component {
         </thead>
         <tbody>
           {this.props.courses.map(course => {
-            var syllabusLink = 'syllabi/' + course['term'] + '/' + course['course']
-
             return (
-              <tr key={course['course'] + course['term']}>
-                <th style={{ fontWeight: 'normal' }}>
-                  <a href={syllabusLink}>
-                    {course['course']}
-                  </a>
-                </th>
-                <th style={{ fontWeight: 'normal' }}>
-                  {course['term']}
-                </th>
-              </tr>
+              course.map(coursesByDept => {
+                return (
+                  <tr>
+                    <th style={{ fontWeight: 'normal' }}>
+                      {coursesByDept.dept}
+                    </th>
+                    <th style={{ fontWeight: 'normal' }}>
+                      {coursesByDept.course}
+                    </th>
+                    <th style={{ fontWeight: 'normal' }}>
+                      {coursesByDept.description}
+                    </th>
+                    <th style={{fontWeight: 'normal'}}>
+                      {''}
+                    </th>
+                  </tr>
+                )
+              })
             )
           })}
         </tbody>
