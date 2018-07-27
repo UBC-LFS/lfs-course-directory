@@ -1,13 +1,12 @@
 import React from 'react'
 import { Table } from 'react-bootstrap'
-
-/* 
+/*
 * Props: courses - list of courses to render
 * Renders a table of courses with links to their syllabi
 */
 
 class ResultsTable extends React.Component {
-  render() {
+  render () {
     return (
       <Table striped bordered hover>
         <thead>
@@ -23,7 +22,7 @@ class ResultsTable extends React.Component {
             return (
               course.map(coursesByDept => {
                 return (
-                  <tr>
+                  <tr key={coursesByDept.dept + coursesByDept.course + coursesByDept.description}>
                     <th style={{ fontWeight: 'normal' }}>
                       {coursesByDept.dept}
                     </th>
