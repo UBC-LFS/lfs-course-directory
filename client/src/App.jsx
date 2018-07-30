@@ -14,7 +14,7 @@ class App extends React.Component {
     this.state = {
       courses: [],
       activeTerm: 'W',
-      syllabi: false
+      syllabi: false,
     }
   }
 
@@ -63,6 +63,46 @@ class App extends React.Component {
     }
   }
 
+  handleSearchInputUpdate = async () => {
+    var text = this.searchbar.value.toUpperCase().split(/\s+/)
+    var dept = text[0]
+    var section = text[1]
+    console.log(text)
+    console.log(dept)
+    console.log(section)
+
+    var filteredCoursesList
+    if (section) {
+      await this.componentDidMount()
+      filteredCoursesList = this.state.courses.map(courses => 
+        courses.filter(course => {
+          return course.dept.includes(dept) && course.course.includes(section)
+        }))
+    } else if (dept) {
+      await this.componentDidMount()
+      filteredCoursesList = this.state.courses.map(courses =>
+        courses.reduce((acc, cur) => {
+          if (cur.dept.includes(dept)) {
+            acc.push(cur)
+          } return acc
+        }, []))
+    } else {
+      return this.componentDidMount()
+    }
+
+    console.log(filteredCoursesList)
+
+    let filteredCourses = filteredCoursesList.filter(courses => courses.length !== 0)
+
+    console.log(filteredCourses)
+
+    if (filteredCourses) {
+      this.setState({
+        courses: filteredCourses
+      })
+    }
+  }
+
   render () {
     return (
       <Grid>
@@ -101,7 +141,7 @@ class App extends React.Component {
         <Row><br /></Row>
         <Row>
           <FormControl type="text" inputRef={el => this.searchbar = el} onChange={this.handleSearchInputUpdate} 
-            placeholder="Search a course code... (ex: FNH200)">
+            placeholder="Search a course code... (ex: FNH 200)">
           </FormControl>
         </Row>
         <br />
