@@ -67,9 +67,6 @@ class App extends React.Component {
     var text = this.searchbar.value.toUpperCase().split(/\s+/)
     var dept = text[0]
     var section = text[1]
-    console.log(text)
-    console.log(dept)
-    console.log(section)
 
     var filteredCoursesList
     if (section) {
@@ -90,11 +87,7 @@ class App extends React.Component {
       return this.componentDidMount()
     }
 
-    console.log(filteredCoursesList)
-
     let filteredCourses = filteredCoursesList.filter(courses => courses.length !== 0)
-
-    console.log(filteredCourses)
 
     if (filteredCourses) {
       this.setState({
