@@ -13,7 +13,8 @@ class App extends React.Component {
     super(props)
     this.state = {
       courses: [],
-      activeTerm: 'W'
+      activeTerm: 'W',
+      syllabi: false
     }
   }
 
@@ -36,7 +37,7 @@ class App extends React.Component {
     }
   }
 
-  handleToggle = async value => {
+  handleToggleForTerm = async value => {
     if (value) {
       await this.setState({
         activeTerm: 'S'
@@ -50,6 +51,18 @@ class App extends React.Component {
     }
   }
 
+  handleToggleForSyllabi = async newvalue => {
+    if (newvalue) {
+      await this.setState({
+        syllabi: true
+      })
+    } else {
+      await this.setState({
+        syllabi: false
+      })
+    }
+  }
+
   render () {
     return (
       <Grid>
@@ -58,7 +71,7 @@ class App extends React.Component {
             <h2>Course Directory</h2>
           </Col>
           <Col>
-          <ToggleButton
+          <ToggleButton key={'term'}
             activeLabel={'S'}
             inactiveLabel={'W'}
             value={this.state.value}
@@ -66,7 +79,22 @@ class App extends React.Component {
               this.setState({
                 value: !value
               })
-              this.handleToggle(!value)}
+              this.handleToggleForTerm(!value)}
+             } />
+          </Col>
+        </Row>
+        <Row><br /></Row>
+        <Row>
+          <Col>
+          <ToggleButton key={'syllabi'}
+            activeLabel={'syllabi'}
+            inactiveLabel={''}
+            value={this.state.newvalue}
+            onToggle={(value) => {
+              this.setState({
+                newvalue: !value
+              })
+              this.handleToggleForSyllabi(!value)}
              } />
           </Col>
         </Row>
@@ -78,7 +106,9 @@ class App extends React.Component {
         </Row>
         <br />
         <Row>
-          <ResultsTable courses={this.state.courses}/>
+          <ResultsTable 
+            courses={this.state.courses}
+            syllabi={this.state.syllabi}/>
         </Row>
       </Grid>
     )
