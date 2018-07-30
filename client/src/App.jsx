@@ -82,7 +82,7 @@ class App extends React.Component {
       await this.componentDidMount()
       filteredCoursesList = this.state.courses.map(courses =>
         courses.reduce((acc, cur) => {
-          if (cur.dept.includes(dept)) {
+          if (cur.dept.includes(dept) || cur.course.includes(dept)) {
             acc.push(cur)
           } return acc
         }, []))
