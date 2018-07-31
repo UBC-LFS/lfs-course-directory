@@ -19,7 +19,7 @@ class ResultsTable extends React.Component {
             </tr>
           </thead>
           <tbody>
-            {this.props.courses.map(course => {
+            {this.props.resultCourses.map(course => {
               return (
                 course.map(coursesByDept => {
                   return (
@@ -56,7 +56,7 @@ class ResultsTable extends React.Component {
             </tr>
           </thead>
           <tbody>
-            {this.props.courses.map(course => {
+            {this.props.resultCourses.map(course => {
               return (
                 course.map(coursesByDept => {
                   if (coursesByDept.syllabus) {

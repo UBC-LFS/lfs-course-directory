@@ -44,11 +44,13 @@ class App extends React.Component {
     
     if (term === 'W') {
       this.setState({
-        courses: exampleInputW
+        courses: exampleInputW,
+        resultCourses: exampleInputW
       })
     } else {
       this.setState({
-        courses: exampleInputS
+        courses: exampleInputS,
+        resultCourses: exampleInputS
       })
     }
   }
@@ -107,13 +109,12 @@ class App extends React.Component {
 
     if (filteredCourses) {
       this.setState({
-        courses: filteredCourses
+        resultCourses: filteredCourses
       })
     }
   }
   
   handleSelection = async (event) => {
-    console.log(event.value)
     if (event.value === '-') {
       return this.componentDidMount()
     } else {
@@ -124,7 +125,7 @@ class App extends React.Component {
         }))
       selectedCourseList = selectedCourseList.filter(courses => courses.length !== 0)
       this.setState({
-        courses:selectedCourseList
+        resultCourses:selectedCourseList
       })
     }
   }
@@ -185,7 +186,7 @@ class App extends React.Component {
         <br />
         <Row>
           <ResultsTable 
-            courses={this.state.courses}
+            resultCourses={this.state.resultCourses}
             syllabi={this.state.syllabi}/>
         </Row>
       </Grid>
