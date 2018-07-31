@@ -61,23 +61,30 @@ class App extends React.Component {
         activeTerm: 'S'
       })
       this.getCoursesForTerm(this.state.activeTerm)
+      this.handleToggleForSyllabi(this.state.syllabi)
     } else {
       await this.setState({
         activeTerm: 'W'
       })
       this.getCoursesForTerm(this.state.activeTerm)
+      this.handleToggleForSyllabi(this.state.syllabi)
     }
   }
 
-  handleToggleForSyllabi = async newvalue => {
+  handleToggleForSyllabi = newvalue => {
+    this.setState({
+      syllabi: newvalue
+    })
     if (newvalue) {
-      await this.setState({
-        syllabi: true
+      let syllabiCourses = this.state.courses.map(courses => {
+        return courses.filter(coursesByDept => coursesByDept.syllabus)
+      })
+      syllabiCourses = syllabiCourses.filter(courses => courses.length !== 0)
+      this.setState({
+        resultCourses: syllabiCourses
       })
     } else {
-      await this.setState({
-        syllabi: false
-      })
+      this.getCoursesForTerm(this.state.activeTerm)
     }
   }
 
