@@ -4,9 +4,24 @@ import { Grid, Row, Col, FormControl } from 'react-bootstrap'
 import 'react-dropdown/style.css'
 import './App.css'
 import ToggleButton from 'react-toggle-button'
+import Select from 'react-select'
 import ResultsTable from './ResultsTable'
 import {exampleInputW} from './inputW'
 import {exampleInputS} from './inputS'
+
+const options = [
+  { value: '-', label: '-' }, 
+  { value: 'APBI', label: 'APBI'}, 
+  { value: 'FNH', label:'FNH'},
+  { value: 'FOOD', label:'FOOD'},
+  { value: 'FRE', label:'FRE'},
+  { value: 'GRS', label:'GRS'},
+  { value: 'HUNU', label:'HUNU'},
+  { value: 'LFS', label:'LFS'},
+  { value: 'LWS', label:'LWS'},
+  { value: 'PLNT', label:'PLNT'},
+  { value: 'SOIL', label:'SOIL'},
+]
 
 class App extends React.Component {
   constructor (props) {
@@ -15,6 +30,7 @@ class App extends React.Component {
       courses: [],
       activeTerm: 'W',
       syllabi: false,
+      resultCourses: []
     }
   }
 
@@ -95,6 +111,23 @@ class App extends React.Component {
       })
     }
   }
+  
+  handleSelection = async (event) => {
+    console.log(event.value)
+    if (event.value === '-') {
+      return this.componentDidMount()
+    } else {
+      await this.componentDidMount()
+      let selectedCourseList = this.state.courses.map(courses =>
+        courses.filter(course => {
+          return (course.dept === event.value)
+        }))
+      selectedCourseList = selectedCourseList.filter(courses => courses.length !== 0)
+      this.setState({
+        courses:selectedCourseList
+      })
+    }
+  }
 
   render () {
     return (
@@ -129,6 +162,18 @@ class App extends React.Component {
               })
               this.handleToggleForSyllabi(!value)}
              } />
+          </Col>
+        </Row>
+        <Row><br /></Row>
+        <Row>
+          <Col>
+          <Select
+            className='basic-single'
+            classNamePrefix='select'
+            defaultValue={options[0]}
+            options= {options}
+            onChange={this.handleSelection}
+            />
           </Col>
         </Row>
         <Row><br /></Row>
