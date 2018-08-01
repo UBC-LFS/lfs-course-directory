@@ -131,23 +131,16 @@ class App extends React.Component {
       })
     }
 
-    this.handleSelection()
-    // this.handleChange()
+    this.handleChange()
   }
 
-  handleSelection = () => {
-    if (this.state.selection === null) {
-      this.handleToggleForSyllabi(this.state.syllabi)
-    } else {
-      let selectedCourseList = this.state.courses.map(courses =>
-        courses.filter(course => {
-          return (course.dept === this.state.selection)
-        }))
-      selectedCourseList = selectedCourseList.filter(courses => courses.length !== 0)
-      this.setState({
-        resultCourses:selectedCourseList
-      })
-    }
+  handleSelection = workingList => {
+    workingList = workingList.map(courses =>
+      courses.filter(course => {
+        return (course.dept === this.state.selection)
+      }))
+    workingList = workingList.filter(courses => courses.length !== 0)
+    return workingList
   }
 
   handleChange = () => {
@@ -158,6 +151,9 @@ class App extends React.Component {
       workingList = this.handleSyllabi(workingList)
     }
     // check selection
+    if (this.state.selection !== null) {
+      workingList = this.handleSelection(workingList)
+    }
     // check search bar
     // set resultCourses: masterList
     this.setState({
