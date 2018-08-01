@@ -30,7 +30,9 @@ class App extends React.Component {
       courses: [],
       activeTerm: 'W',
       syllabi: false,
-      resultCourses: []
+      syllabiCourses: [],
+      resultCourses: [],
+      selection: null
     }
   }
 
@@ -60,32 +62,29 @@ class App extends React.Component {
       await this.setState({
         activeTerm: 'S'
       })
-      this.getCoursesForTerm(this.state.activeTerm)
-      this.handleToggleForSyllabi(this.state.syllabi)
     } else {
       await this.setState({
         activeTerm: 'W'
       })
-      this.getCoursesForTerm(this.state.activeTerm)
-      this.handleToggleForSyllabi(this.state.syllabi)
     }
+    this.getCoursesForTerm(this.state.activeTerm)
+
+    this.handleChange()
   }
 
-  handleToggleForSyllabi = newvalue => {
-    this.setState({
+  handleToggleForSyllabi = async newvalue => {
+    await this.setState({
       syllabi: newvalue
     })
-    if (newvalue) {
-      let syllabiCourses = this.state.courses.map(courses => {
-        return courses.filter(coursesByDept => coursesByDept.syllabus)
-      })
-      syllabiCourses = syllabiCourses.filter(courses => courses.length !== 0)
-      this.setState({
-        resultCourses: syllabiCourses
-      })
-    } else {
-      this.getCoursesForTerm(this.state.activeTerm)
-    }
+    this.handleChange()
+  }
+
+  handleSyllabi = (workingList) => {
+    workingList = workingList.map(courses => {
+      return courses.filter(coursesByDept => coursesByDept.syllabus)
+    })
+    workingList = workingList.filter(courses => courses.length !== 0)
+    return workingList
   }
 
   handleSearchInputUpdate = async () => {
@@ -121,20 +120,49 @@ class App extends React.Component {
     }
   }
   
-  handleSelection = async (event) => {
+  handleSelectionEvent = async event => {
     if (event.value === '-') {
-      return this.componentDidMount()
+      await this.setState({
+        selection: null
+      })
     } else {
-      await this.componentDidMount()
+      await this.setState({
+        selection: event.value
+      })
+    }
+
+    this.handleSelection()
+    // this.handleChange()
+  }
+
+  handleSelection = () => {
+    if (this.state.selection === null) {
+      this.handleToggleForSyllabi(this.state.syllabi)
+    } else {
       let selectedCourseList = this.state.courses.map(courses =>
         courses.filter(course => {
-          return (course.dept === event.value)
+          return (course.dept === this.state.selection)
         }))
       selectedCourseList = selectedCourseList.filter(courses => courses.length !== 0)
       this.setState({
         resultCourses:selectedCourseList
       })
     }
+  }
+
+  handleChange = () => {
+    // check term
+    let workingList = this.state.courses
+    // check syllabi
+    if (this.state.syllabi) {
+      workingList = this.handleSyllabi(workingList)
+    }
+    // check selection
+    // check search bar
+    // set resultCourses: masterList
+    this.setState({
+      resultCourses: workingList
+    })
   }
 
   render () {
@@ -180,7 +208,7 @@ class App extends React.Component {
             classNamePrefix='select'
             defaultValue={options[0]}
             options= {options}
-            onChange={this.handleSelection}
+            onChange={this.handleSelectionEvent}
             />
           </Col>
         </Row>
