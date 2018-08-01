@@ -30,9 +30,9 @@ class App extends React.Component {
       courses: [],
       activeTerm: 'W',
       syllabi: false,
-      syllabiCourses: [],
       resultCourses: [],
-      selection: null
+      selection: null,
+      searchBar: false
     }
   }
 
@@ -86,39 +86,6 @@ class App extends React.Component {
     workingList = workingList.filter(courses => courses.length !== 0)
     return workingList
   }
-
-  handleSearchInputUpdate = async () => {
-    var text = this.searchbar.value.toUpperCase().split(/\s+/)
-    var dept = text[0]
-    var section = text[1]
-
-    var filteredCoursesList
-    if (section) {
-      await this.componentDidMount()
-      filteredCoursesList = this.state.courses.map(courses => 
-        courses.filter(course => {
-          return course.dept.includes(dept) && course.course.includes(section)
-        }))
-    } else if (dept) {
-      await this.componentDidMount()
-      filteredCoursesList = this.state.courses.map(courses =>
-        courses.reduce((acc, cur) => {
-          if (cur.dept.includes(dept) || cur.course.includes(dept)) {
-            acc.push(cur)
-          } return acc
-        }, []))
-    } else {
-      return this.componentDidMount()
-    }
-
-    let filteredCourses = filteredCoursesList.filter(courses => courses.length !== 0)
-
-    if (filteredCourses) {
-      this.setState({
-        resultCourses: filteredCourses
-      })
-    }
-  }
   
   handleSelectionEvent = async event => {
     if (event.value === '-') {
@@ -143,6 +110,67 @@ class App extends React.Component {
     return workingList
   }
 
+  handleSearchUpdate = async () => {
+    let text = this.searchbar.value.toUpperCase().split(/\s+/)
+    
+    if (text[0].length > 0) {
+      await this.setState({
+        searchBar: text
+      })
+    } else {
+      await this.setState({
+        searchBar: false
+      })
+    }
+
+    this.handleChange()
+  }
+
+  handleSearchFilter = workingList => {
+    let text = this.state.searchBar
+
+    workingList = workingList.map(courses =>
+      courses.filter(course => {
+        return course.dept.includes(text[0]) || 
+          course.course.includes(text[0]) || 
+          course.description.toUpperCase().includes(text[0])
+      }))
+    
+    if (text[1]) {
+      workingList = workingList.map(courses => 
+        courses.filter(course => {
+          return ((course.dept.includes(text[0]) || course.dept.includes(text[1])) && 
+            (course.course.includes(text[0]) || course.course.includes(text[1]))) ||
+            (course.description.toUpperCase().includes(text[0]) && course.description.toUpperCase().includes(text[1]))
+        }))
+    }
+
+    if (text.length > 2) {
+      workingList = workingList.map(courses =>
+        courses.filter(course => {
+          return this.checkIncludes(course.description.toUpperCase(), text)
+        }))
+    }
+
+    workingList = workingList.filter(courses => courses.length !== 0)
+    return workingList
+  }
+
+  /**helper function for handleSearchFilter
+   * takes a string and an array of strings and see if string contains the elements of the array
+   * @param string description
+   * @param array words
+   * @returns boolean
+   */
+  checkIncludes = (description, words) => {
+    return words.reduce((acc, cur) => {
+      if (!description.includes(cur)) {
+        acc = false
+      }
+      return acc
+    }, true)
+  }
+
   handleChange = () => {
     // check term
     let workingList = this.state.courses
@@ -155,6 +183,10 @@ class App extends React.Component {
       workingList = this.handleSelection(workingList)
     }
     // check search bar
+    if (this.state.searchBar) {
+      workingList = this.handleSearchFilter(workingList)
+    }
+
     // set resultCourses: masterList
     this.setState({
       resultCourses: workingList
@@ -210,7 +242,7 @@ class App extends React.Component {
         </Row>
         <Row><br /></Row>
         <Row>
-          <FormControl type="text" inputRef={el => this.searchbar = el} onChange={this.handleSearchInputUpdate} 
+          <FormControl type="text" inputRef={el => this.searchbar = el} onChange={this.handleSearchUpdate} 
             placeholder="Search a course code... (ex: FNH 200)">
           </FormControl>
         </Row>
