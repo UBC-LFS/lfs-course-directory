@@ -23,12 +23,17 @@ const options = [
   { value: 'SOIL', label:'SOIL'},
 ]
 
+const yearTerms = [
+  { value: '2018W', label: '2018 Winter'},
+  { value: '2018S', label: '2018 Summer'}
+]
+
 class App extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
       courses: [],
-      activeTerm: 'W',
+      activeTerm: '2018W',
       syllabi: false,
       resultCourses: [],
       selection: null,
@@ -44,7 +49,7 @@ class App extends React.Component {
     // const courses = await fetch(`http://localhost:8081/${term}`)
     //   .then(x => x.json())
     
-    if (term === 'W') {
+    if (term === '2018W') {
       this.setState({
         courses: exampleInputW,
         resultCourses: exampleInputW
@@ -65,6 +70,21 @@ class App extends React.Component {
     } else {
       await this.setState({
         activeTerm: 'W'
+      })
+    }
+    this.getCoursesForTerm(this.state.activeTerm)
+
+    this.handleChange()
+  }
+
+  handleYearTerm = async event => {
+    if (event.value === '2018W') {
+      await this.setState({
+        activeTerm: '2018W'
+      })
+    } else {
+      await this.setState({
+        activeTerm: '2018S'
       })
     }
     this.getCoursesForTerm(this.state.activeTerm)
@@ -205,15 +225,15 @@ class App extends React.Component {
         <Table condensed hover>
           <thead>
             <tr>
-              {/* <th>YearTerm <Select
+              <th>YearTerm <Select
                 className='basic-single'
                 classNamePrefix='select'
-                defaultValue={options[0]}
-                options= {options}
-                onChange={this.handleSelectionEvent}
+                defaultValue={yearTerms[0]}
+                options= {yearTerms}
+                onChange={this.handleYearTerm}
                 />
-              </th> */}
-              <th>Term <ToggleButton key={'term'}
+              </th>
+              {/* <th>Term <ToggleButton key={'term'}
                 activeLabel={'S'}
                 inactiveLabel={'W'}
                 value={this.state.value}
@@ -223,7 +243,7 @@ class App extends React.Component {
                   })
                   this.handleToggleForTerm(!value)}
                 } />
-              </th>
+              </th> */}
               <th>Dept <Select
                 className='basic-single'
                 classNamePrefix='select'
