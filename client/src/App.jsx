@@ -41,8 +41,8 @@ class App extends React.Component {
   }
 
   getCoursesForTerm = async (term) => {
-    // const courses = await fetch(`http://localhost:8081/${term}`)
-    // .then(x => x.json())
+    const courses = await fetch(`http://localhost:8081/${term}`)
+      .then(x => x.json())
     
     if (term === 'W') {
       this.setState({

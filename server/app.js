@@ -11,6 +11,7 @@ app.use((req, res, next) => {
   next()
 })
 
+// this logic needs to be checked out, could be problematic...
 app.get('/:term', async ({ params: { term } }, res) => {
   const year = getYear()
   const pathToFile = path.join(__dirname, `courseFiles/${year}${term}.JSON`)
