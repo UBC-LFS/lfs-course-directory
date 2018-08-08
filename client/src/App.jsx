@@ -205,40 +205,52 @@ class App extends React.Component {
         <Table condensed hover>
           <thead>
             <tr>
+              {/* <th>YearTerm <Select
+                className='basic-single'
+                classNamePrefix='select'
+                defaultValue={options[0]}
+                options= {options}
+                onChange={this.handleSelectionEvent}
+                />
+              </th> */}
               <th>Term <ToggleButton key={'term'}
-              activeLabel={'S'}
-              inactiveLabel={'W'}
-              value={this.state.value}
-              onToggle={(value) => {
-                this.setState({
-                  value: !value
-                })
-                this.handleToggleForTerm(!value)}
-              } /></th>
-              <th>Syllabus <ToggleButton key={'syllabi'}
-              activeLabel={''}
-              inactiveLabel={''}
-              value={this.state.newvalue}
-              onToggle={(value) => {
-                this.setState({
-                  newvalue: !value
-                })
-                this.handleToggleForSyllabi(!value)}
-              } /></th>
+                activeLabel={'S'}
+                inactiveLabel={'W'}
+                value={this.state.value}
+                onToggle={(value) => {
+                  this.setState({
+                    value: !value
+                  })
+                  this.handleToggleForTerm(!value)}
+                } />
+              </th>
               <th>Dept <Select
-              className='basic-single'
-              classNamePrefix='select'
-              defaultValue={options[0]}
-              options= {options}
-              onChange={this.handleSelectionEvent}
-              /></th>
-              <th>Search <FormControl type="text" inputRef={el => this.searchbar = el} onChange={this.handleSearchUpdate} 
-              placeholder="Search a course code... (ex: FNH 200)">
-            </FormControl></th>
+                className='basic-single'
+                classNamePrefix='select'
+                defaultValue={options[0]}
+                options= {options}
+                onChange={this.handleSelectionEvent}
+                /></th>
+                <th dataAlign='center'>Syllabus
+                <ToggleButton key={'syllabi'}
+                activeLabel={''}
+                inactiveLabel={''}
+                value={this.state.newvalue}
+                onToggle={(value) => {
+                  this.setState({
+                    newvalue: !value
+                  })
+                  this.handleToggleForSyllabi(!value)}
+                } />
+              </th>
             </tr>
           </thead>
         </Table>
-        <br />
+        <Row>
+        Search <FormControl type="text" inputRef={el => this.searchbar = el} onChange={this.handleSearchUpdate} 
+              placeholder="Search a course code... (ex: FNH 200)">
+            </FormControl>
+        </Row>
         <Row>
           <ResultsTable 
             resultCourses={this.state.resultCourses}
