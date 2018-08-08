@@ -23,26 +23,53 @@ const options = [
   { value: 'SOIL', label:'SOIL'},
 ]
 
-const yearTerms = [
-  { value: '2018W', label: '2018 Winter'},
-  { value: '2018S', label: '2018 Summer'}
-]
+// const yearTerms = [
+//   { value: '2018W', label: '2018 Winter'},
+//   { value: '2018S', label: '2018 Summer'}
+// ]
+
+const getYear = () => {
+  const date = new Date()
+  return date.getFullYear()
+}
 
 class App extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
       courses: [],
+      availableTerms: [],
       activeTerm: '2018W',
       syllabi: false,
       resultCourses: [],
       selection: null,
+      selectionDepts: [],
       searchBar: false
     }
   }
 
   componentDidMount () {
+    this.populateYearTerms()
     this.getCoursesForTerm(this.state.activeTerm)
+  }
+
+  populateYearTerms = () => {
+    let year = getYear()
+    let prevYear = year - 1
+    let nextYear = year + 1
+
+    let yearAndTerms = [
+      { value: nextYear + 'W', label: nextYear + ' Winter' },
+      { value: nextYear + 'S', label: nextYear + ' Summer' },
+      { value: year + 'W', label: year + ' Winter' },
+      { value: year + 'S', label: year + ' Summer' },
+      { value: prevYear + 'W', label: prevYear + ' Winter' },
+      { value: prevYear + 'S', label: prevYear + ' Summer' }
+    ]
+
+    this.setState({
+      availableTerms: yearAndTerms
+    })
   }
 
   getCoursesForTerm = async (term) => {
@@ -62,31 +89,34 @@ class App extends React.Component {
     }
   }
 
-  handleToggleForTerm = async value => {
-    if (value) {
-      await this.setState({
-        activeTerm: 'S'
-      })
-    } else {
-      await this.setState({
-        activeTerm: 'W'
-      })
-    }
-    this.getCoursesForTerm(this.state.activeTerm)
+  // handleToggleForTerm = async value => {
+  //   if (value) {
+  //     await this.setState({
+  //       activeTerm: 'S'
+  //     })
+  //   } else {
+  //     await this.setState({
+  //       activeTerm: 'W'
+  //     })
+  //   }
+  //   this.getCoursesForTerm(this.state.activeTerm)
 
-    this.handleChange()
-  }
+  //   this.handleChange()
+  // }
 
   handleYearTerm = async event => {
-    if (event.value === '2018W') {
-      await this.setState({
-        activeTerm: '2018W'
-      })
-    } else {
-      await this.setState({
-        activeTerm: '2018S'
-      })
-    }
+    await this.setState({
+      activeTerm: event.value
+    })
+    // if (event.value === '2018W') {
+    //   await this.setState({
+    //     activeTerm: event.value
+    //   })
+    // } else if (event.value === '2018S') {
+    //   await this.setState({
+    //     activeTerm: '2018S'
+    //   })
+    // }
     this.getCoursesForTerm(this.state.activeTerm)
 
     this.handleChange()
@@ -228,22 +258,11 @@ class App extends React.Component {
               <th>YearTerm <Select
                 className='basic-single'
                 classNamePrefix='select'
-                defaultValue={yearTerms[0]}
-                options= {yearTerms}
+                defaultValue={this.state.availableTerms[0]}
+                options= {this.state.availableTerms}
                 onChange={this.handleYearTerm}
                 />
               </th>
-              {/* <th>Term <ToggleButton key={'term'}
-                activeLabel={'S'}
-                inactiveLabel={'W'}
-                value={this.state.value}
-                onToggle={(value) => {
-                  this.setState({
-                    value: !value
-                  })
-                  this.handleToggleForTerm(!value)}
-                } />
-              </th> */}
               <th>Dept <Select
                 className='basic-single'
                 classNamePrefix='select'
@@ -251,7 +270,7 @@ class App extends React.Component {
                 options= {options}
                 onChange={this.handleSelectionEvent}
                 /></th>
-                <th dataAlign='center'>Syllabus
+                <th>Syllabus
                 <ToggleButton key={'syllabi'}
                 activeLabel={''}
                 inactiveLabel={''}
