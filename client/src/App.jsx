@@ -156,31 +156,53 @@ class App extends React.Component {
   handleSearchFilter = workingList => {
     let text = this.state.searchBar
 
-    workingList = workingList.map(courses =>
-      courses.filter(course => {
-        return course.dept.includes(text[0]) || 
-          course.course.includes(text[0]) || 
-          course.description.toUpperCase().includes(text[0])
-      }))
-    
-    if (text[1]) {
-      workingList = workingList.map(courses => 
-        courses.filter(course => {
-          return ((course.dept.includes(text[0]) || course.dept.includes(text[1])) && 
-            (course.course.includes(text[0]) || course.course.includes(text[1]))) ||
-            (course.description.toUpperCase().includes(text[0]) && course.description.toUpperCase().includes(text[1]))
-        }))
-    }
-
     if (text.length > 2) {
-      workingList = workingList.map(courses =>
-        courses.filter(course => {
-          return this.checkIncludes(course.description.toUpperCase(), text)
-        }))
+      return workingList
+        .map(courses => courses.filter(course => this.checkIncludes(course.description.toUpperCase(), text)))
+        .filter(courses => courses.length !== 0)
+    }
+    
+    else if (text[1]) {
+      return workingList
+        .map(courses => courses.filter(course => ((course.dept.includes(text[0]) || course.dept.includes(text[1])) 
+          && (course.course.includes(text[0]) || course.course.includes(text[1])))
+          || (course.description.toUpperCase().includes(text[0]) && course.description.toUpperCase().includes(text[1]))))
+        .filter(courses => courses.length !== 0)
+    }
+    
+    else {
+      return workingList
+        .map(courses => courses.filter(course => course.dept.includes(text[0])
+          || course.course.includes(text[0])
+          || course.description.toUpperCase().includes(text[0])))
+        .filter(courses => courses.length !== 0)
     }
 
-    workingList = workingList.filter(courses => courses.length !== 0)
-    return workingList
+    // workingList = workingList.map(courses =>
+    //   courses.filter(course => {
+    //     return course.dept.includes(text[0]) || 
+    //       course.course.includes(text[0]) || 
+    //       course.description.toUpperCase().includes(text[0])
+    //   }))
+    
+    // if (text[1]) {
+    //   workingList = workingList.map(courses => 
+    //     courses.filter(course => {
+    //       return ((course.dept.includes(text[0]) || course.dept.includes(text[1])) && 
+    //         (course.course.includes(text[0]) || course.course.includes(text[1]))) ||
+    //         (course.description.toUpperCase().includes(text[0]) && course.description.toUpperCase().includes(text[1]))
+    //     }))
+    // }
+
+    // if (text.length > 2) {
+    //   workingList = workingList.map(courses =>
+    //     courses.filter(course => {
+    //       return this.checkIncludes(course.description.toUpperCase(), text)
+    //     }))
+    // }
+
+    // workingList = workingList.filter(courses => courses.length !== 0)
+    // return workingList
   }
 
   /**helper function for handleSearchFilter
@@ -206,7 +228,7 @@ class App extends React.Component {
       workingList = this.handleSyllabi(workingList)
     }
     // check selection
-    if (this.state.selection !== null) {
+    if (this.state.selectedDept !== null) {
       workingList = this.handleSelection(workingList)
     }
     // check search bar
