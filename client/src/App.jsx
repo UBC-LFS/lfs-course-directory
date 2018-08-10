@@ -154,27 +154,30 @@ class App extends React.Component {
   }
 
   handleSearchFilter = workingList => {
-    let text = this.state.searchBar
+    let textArray = this.state.searchBar
+    const firstWord = textArray[0]
 
-    if (text.length > 2) {
+
+    if (textArray.length > 2) {
       return workingList
-        .map(courses => courses.filter(course => this.checkIncludes(course.description.toUpperCase(), text)))
+        .map(courses => courses.filter(course => this.checkIncludes(course.description.toUpperCase(), textArray)))
         .filter(courses => courses.length !== 0)
     }
     
-    else if (text[1]) {
+    else if (textArray[1]) {
+      const secondWord = textArray[1]
       return workingList
-        .map(courses => courses.filter(course => ((course.dept.includes(text[0]) || course.dept.includes(text[1])) 
-          && (course.course.includes(text[0]) || course.course.includes(text[1])))
-          || (course.description.toUpperCase().includes(text[0]) && course.description.toUpperCase().includes(text[1]))))
+        .map(courses => courses.filter(course => ((course.dept.includes(firstWord) || course.dept.includes(secondWord)) 
+          && (course.course.includes(firstWord) || course.course.includes(secondWord)))
+          || (course.description.toUpperCase().includes(firstWord) && course.description.toUpperCase().includes(secondWord))))
         .filter(courses => courses.length !== 0)
     }
     
     else {
       return workingList
-        .map(courses => courses.filter(course => course.dept.includes(text[0])
-          || course.course.includes(text[0])
-          || course.description.toUpperCase().includes(text[0])))
+        .map(courses => courses.filter(course => course.dept.includes(firstWord)
+          || course.course.includes(firstWord)
+          || course.description.toUpperCase().includes(firstWord)))
         .filter(courses => courses.length !== 0)
     }
 
