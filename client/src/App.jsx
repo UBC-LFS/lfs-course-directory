@@ -77,7 +77,7 @@ class App extends React.Component {
     // const courses = await fetch(`http://localhost:8081/${year}/${term}`)
     //   .then(x => x.json())
     
-    if (term === '2018W') {
+    if (term === 'W') {
       this.setState({
         courses: exampleInputW,
         resultCourses: exampleInputW
@@ -103,7 +103,7 @@ class App extends React.Component {
     //     selectedYearTerm: '2018S'
     //   })
     // }
-    this.getCoursesForTerm(this.state.selectedYearTerm)
+    this.getCoursesForTerm(this.state.selectedYearTerm.year, this.state.selectedYearTerm.term)
 
     this.handleChange()
   }
