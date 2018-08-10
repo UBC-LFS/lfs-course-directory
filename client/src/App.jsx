@@ -39,10 +39,10 @@ class App extends React.Component {
     this.state = {
       courses: [],
       availableTerms: [],
-      activeTerm: '2018W',
+      selectedYearTerm: {},
       syllabi: false,
       resultCourses: [],
-      selection: null,
+      selectedDept: null,
       selectionDepts: [],
       searchBar: false
     }
@@ -50,7 +50,7 @@ class App extends React.Component {
 
   componentDidMount () {
     this.populateYearTerms()
-    this.getCoursesForTerm(this.state.activeTerm)
+    this.getCoursesForTerm(this.state.selectedYearTerm.year, this.state.selectedYearTerm.term)
   }
 
   populateYearTerms = () => {
@@ -59,21 +59,22 @@ class App extends React.Component {
     let nextYear = year + 1
 
     let yearAndTerms = [
-      { value: nextYear + 'W', label: nextYear + ' Winter' },
-      { value: nextYear + 'S', label: nextYear + ' Summer' },
-      { value: year + 'W', label: year + ' Winter' },
-      { value: year + 'S', label: year + ' Summer' },
-      { value: prevYear + 'W', label: prevYear + ' Winter' },
-      { value: prevYear + 'S', label: prevYear + ' Summer' }
+      { value: { year: nextYear, term: 'W' }, label: nextYear + ' Winter' },
+      { value: { year: nextYear, term: 'S' }, label: nextYear + ' Summer' },
+      { value: { year, term: 'W' }, label: year + ' Winter' },
+      { value: { year, term: 'S' }, label: year + ' Summer' },
+      { value: { year: prevYear, term: 'W' }, label: prevYear + ' Winter' },
+      { value: { year: prevYear, term: 'S' }, label: prevYear + ' Summer' }
     ]
 
     this.setState({
-      availableTerms: yearAndTerms
+      availableTerms: yearAndTerms,
+      selectedYearTerm: { year, term: 'W' }
     })
   }
 
-  getCoursesForTerm = async (term) => {
-    // const courses = await fetch(`http://localhost:8081/${term}`)
+  getCoursesForTerm = async (year, term) => {
+    // const courses = await fetch(`http://localhost:8081/${year}/${term}`)
     //   .then(x => x.json())
     
     if (term === '2018W') {
@@ -89,35 +90,20 @@ class App extends React.Component {
     }
   }
 
-  // handleToggleForTerm = async value => {
-  //   if (value) {
-  //     await this.setState({
-  //       activeTerm: 'S'
-  //     })
-  //   } else {
-  //     await this.setState({
-  //       activeTerm: 'W'
-  //     })
-  //   }
-  //   this.getCoursesForTerm(this.state.activeTerm)
-
-  //   this.handleChange()
-  // }
-
   handleYearTerm = async event => {
     await this.setState({
-      activeTerm: event.value
+      selectedYearTerm: event.value
     })
     // if (event.value === '2018W') {
     //   await this.setState({
-    //     activeTerm: event.value
+    //     selectedYearTerm: event.value
     //   })
     // } else if (event.value === '2018S') {
     //   await this.setState({
-    //     activeTerm: '2018S'
+    //     selectedYearTerm: '2018S'
     //   })
     // }
-    this.getCoursesForTerm(this.state.activeTerm)
+    this.getCoursesForTerm(this.state.selectedYearTerm)
 
     this.handleChange()
   }
@@ -129,36 +115,27 @@ class App extends React.Component {
     this.handleChange()
   }
 
-  handleSyllabi = (workingList) => {
-    workingList = workingList.map(courses => {
-      return courses.filter(coursesByDept => coursesByDept.syllabus)
-    })
-    workingList = workingList.filter(courses => courses.length !== 0)
-    return workingList
-  }
+  handleSyllabi = workingList => workingList
+    .map(courses => courses.filter(({ syllabus }) => syllabus))
+    .filter(courses => courses.length !== 0)
   
   handleSelectionEvent = async event => {
     if (event.value === '-') {
       await this.setState({
-        selection: null
+        selectedDept: null
       })
     } else {
       await this.setState({
-        selection: event.value
+        selectedDept: event.value
       })
     }
 
     this.handleChange()
   }
 
-  handleSelection = workingList => {
-    workingList = workingList.map(courses =>
-      courses.filter(course => {
-        return (course.dept === this.state.selection)
-      }))
-    workingList = workingList.filter(courses => courses.length !== 0)
-    return workingList
-  }
+  handleSelection = workingList => workingList
+    .map(courses => courses.filter(({ dept }) => dept === this.state.selectedDept))
+    .filter(courses => courses.length !== 0)
 
   handleSearchUpdate = async () => {
     let text = this.searchbar.value.toUpperCase().split(/\s+/)
