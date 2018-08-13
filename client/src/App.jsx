@@ -8,17 +8,17 @@ import Select from 'react-select'
 import ResultsTable from './ResultsTable'
 
 const options = [
-  { value: '-', label: '-' }, 
-  { value: 'APBI', label: 'APBI'}, 
-  { value: 'FNH', label:'FNH'},
-  { value: 'FOOD', label:'FOOD'},
-  { value: 'FRE', label:'FRE'},
-  { value: 'GRS', label:'GRS'},
-  { value: 'HUNU', label:'HUNU'},
-  { value: 'LFS', label:'LFS'},
-  { value: 'LWS', label:'LWS'},
-  { value: 'PLNT', label:'PLNT'},
-  { value: 'SOIL', label:'SOIL'},
+  { value: '-', label: '-' },
+  { value: 'APBI', label: 'APBI' },
+  { value: 'FNH', label: 'FNH' },
+  { value: 'FOOD', label: 'FOOD' },
+  { value: 'FRE', label: 'FRE' },
+  { value: 'GRS', label: 'GRS' },
+  { value: 'HUNU', label: 'HUNU' },
+  { value: 'LFS', label: 'LFS' },
+  { value: 'LWS', label: 'LWS' },
+  { value: 'PLNT', label: 'PLNT' },
+  { value: 'SOIL', label: 'SOIL' },
 ]
 
 const getYear = () => {
@@ -27,7 +27,7 @@ const getYear = () => {
 }
 
 class App extends React.Component {
-  constructor (props) {
+  constructor(props) {
     super(props)
     this.state = {
       courses: [],
@@ -42,7 +42,7 @@ class App extends React.Component {
     }
   }
 
-  componentDidMount () {
+  componentDidMount() {
     this.populateYearTerms()
   }
 
@@ -77,6 +77,7 @@ class App extends React.Component {
     else {
       const courses = await response.json()
       this.setState({
+        invalidYearTerm: false,
         courses: courses,
         filteredCourses: courses
       })
@@ -101,7 +102,7 @@ class App extends React.Component {
   handleSyllabi = workingList => workingList
     .map(courses => courses.filter(({ syllabus }) => syllabus))
     .filter(courses => courses.length !== 0)
-  
+
   handleSelectionEvent = async event => {
     if (event.value === '-') {
       await this.setState({
@@ -122,7 +123,7 @@ class App extends React.Component {
 
   handleSearchUpdate = async () => {
     let text = this.searchbar.value.toUpperCase().split(/\s+/)
-    
+
     if (text[0].length > 0) {
       await this.setState({
         searchBar: text
@@ -146,16 +147,16 @@ class App extends React.Component {
         .map(courses => courses.filter(course => this.checkIncludes(course.description.toUpperCase(), textArray)))
         .filter(courses => courses.length !== 0)
     }
-    
+
     else if (textArray[1]) {
       const secondWord = textArray[1]
       return workingList
-        .map(courses => courses.filter(course => ((course.dept.includes(firstWord) || course.dept.includes(secondWord)) 
+        .map(courses => courses.filter(course => ((course.dept.includes(firstWord) || course.dept.includes(secondWord))
           && (course.course.includes(firstWord) || course.course.includes(secondWord)))
           || (course.description.toUpperCase().includes(firstWord) && course.description.toUpperCase().includes(secondWord))))
         .filter(courses => courses.length !== 0)
     }
-    
+
     else {
       return workingList
         .map(courses => courses.filter(course => course.dept.includes(firstWord)
@@ -196,7 +197,7 @@ class App extends React.Component {
     })
   }
 
-  render () {
+  render() {
     return (
       <Grid>
         <Row className='show-grid'>
@@ -212,41 +213,44 @@ class App extends React.Component {
                 className='basic-single'
                 classNamePrefix='select'
                 defaultValue={this.state.availableTerms[0]}
-                options= {this.state.availableTerms}
+                options={this.state.availableTerms}
                 onChange={this.handleYearTerm}
-                />
+              />
               </th>
               <th>Dept <Select
                 className='basic-single'
                 classNamePrefix='select'
                 defaultValue={options[0]}
-                options= {options}
+                options={options}
                 onChange={this.handleSelectionEvent}
-                /></th>
-                <th>Syllabus
+              /></th>
+              <th>Syllabus
                 <ToggleButton key={'syllabi'}
-                activeLabel={''}
-                inactiveLabel={''}
-                value={this.state.newvalue}
-                onToggle={(value) => {
-                  this.setState({
-                    newvalue: !value
-                  })
-                  this.handleToggleForSyllabi(!value)}
-                } />
+                  activeLabel={''}
+                  inactiveLabel={''}
+                  value={this.state.newvalue}
+                  onToggle={(value) => {
+                    this.setState({
+                      newvalue: !value
+                    })
+                    this.handleToggleForSyllabi(!value)
+                  }
+                  } />
               </th>
             </tr>
           </thead>
         </Table>
         <Row>
-        Search <FormControl type="text" inputRef={el => this.searchbar = el} onChange={this.handleSearchUpdate} 
-              placeholder="Search a course code... (ex: FNH 200)">
-            </FormControl>
+          Search <FormControl type="text" inputRef={el => this.searchbar = el} onChange={this.handleSearchUpdate}
+            placeholder="Search a course code... (ex: FNH 200)">
+          </FormControl>
         </Row>
         <Row>
-          <ResultsTable 
-            filteredCourses={this.state.filteredCourses}
-            syllabi={this.state.syllabi}/>
+          {this.state.invalidYearTerm ? <p>Unfortunately, this year and term are not available at the moment.</p> :
+            <ResultsTable
+              filteredCourses={this.state.filteredCourses}
+              syllabi={this.state.syllabi} />
+          }
         </Row>
       </Grid>
     )
