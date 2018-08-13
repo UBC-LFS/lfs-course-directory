@@ -44,6 +44,7 @@ class App extends React.Component {
 
   componentDidMount() {
     this.populateYearTerms()
+      .then(({ year, term }) => this.getCoursesForTerm(year, term))
   }
 
   populateYearTerms = async () => {
@@ -59,12 +60,11 @@ class App extends React.Component {
       { value: { year: prevYear, term: 'W' }, label: prevYear + ' Winter' },
       { value: { year: prevYear, term: 'S' }, label: prevYear + ' Summer' }
     ]
-
-    await this.setState({
+    this.setState({
       availableTerms: yearAndTerms,
       selectedYearTerm: { year, term: 'W' }
     })
-    this.getCoursesForTerm(this.state.selectedYearTerm.year, this.state.selectedYearTerm.term)
+    return { year, term: 'W' }
   }
 
   getCoursesForTerm = async (year, term) => {
@@ -113,7 +113,6 @@ class App extends React.Component {
         selectedDept: event.value
       })
     }
-
     this.handleChange()
   }
 
@@ -209,7 +208,7 @@ class App extends React.Component {
         <Table condensed hover>
           <thead>
             <tr>
-              <th>YearTerm <Select
+              <th>Session <Select
                 className='basic-single'
                 classNamePrefix='select'
                 defaultValue={this.state.availableTerms[0]}
