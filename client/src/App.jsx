@@ -6,8 +6,6 @@ import './App.css'
 import ToggleButton from 'react-toggle-button'
 import Select from 'react-select'
 import ResultsTable from './ResultsTable'
-import {exampleInputW} from './inputW'
-import {exampleInputS} from './inputS'
 
 const options = [
   { value: '-', label: '-' }, 
@@ -39,7 +37,8 @@ class App extends React.Component {
       filteredCourses: [],
       selectedDept: null,
       selectionDepts: [],
-      searchBar: false
+      searchBar: false,
+      invalidYearTerm: false
     }
   }
 
@@ -48,11 +47,11 @@ class App extends React.Component {
   }
 
   populateYearTerms = async () => {
-    let year = getYear()
-    let prevYear = year - 1
-    let nextYear = year + 1
+    const year = getYear()
+    const prevYear = year - 1
+    const nextYear = year + 1
 
-    let yearAndTerms = [
+    const yearAndTerms = [
       { value: { year: nextYear, term: 'W' }, label: nextYear + ' Winter' },
       { value: { year: nextYear, term: 'S' }, label: nextYear + ' Summer' },
       { value: { year, term: 'W' }, label: year + ' Winter' },
@@ -69,18 +68,17 @@ class App extends React.Component {
   }
 
   getCoursesForTerm = async (year, term) => {
-    const courses = await fetch(`http://localhost:8081/${year}/${term}`)
-      .then(x => x.json())
-    
-    if (term === 'W') {
+    const response = await fetch(`http://localhost:8081/${year}/${term}`)
+    if (response.status === 404) {
       this.setState({
-        courses: exampleInputW,
-        filteredCourses: exampleInputW
+        invalidYearTerm: true
       })
-    } else {
+    }
+    else {
+      const courses = await response.json()
       this.setState({
-        courses: exampleInputS,
-        filteredCourses: exampleInputS
+        courses: courses,
+        filteredCourses: courses
       })
     }
   }
@@ -89,7 +87,7 @@ class App extends React.Component {
     await this.setState({
       selectedYearTerm: event.value
     })
-    this.getCoursesForTerm(this.state.selectedYearTerm.year, this.state.selectedYearTerm.term)
+    await this.getCoursesForTerm(this.state.selectedYearTerm.year, this.state.selectedYearTerm.term)
     this.handleChange()
   }
 
@@ -165,40 +163,8 @@ class App extends React.Component {
           || course.description.toUpperCase().includes(firstWord)))
         .filter(courses => courses.length !== 0)
     }
-
-    // workingList = workingList.map(courses =>
-    //   courses.filter(course => {
-    //     return course.dept.includes(text[0]) || 
-    //       course.course.includes(text[0]) || 
-    //       course.description.toUpperCase().includes(text[0])
-    //   }))
-    
-    // if (text[1]) {
-    //   workingList = workingList.map(courses => 
-    //     courses.filter(course => {
-    //       return ((course.dept.includes(text[0]) || course.dept.includes(text[1])) && 
-    //         (course.course.includes(text[0]) || course.course.includes(text[1]))) ||
-    //         (course.description.toUpperCase().includes(text[0]) && course.description.toUpperCase().includes(text[1]))
-    //     }))
-    // }
-
-    // if (text.length > 2) {
-    //   workingList = workingList.map(courses =>
-    //     courses.filter(course => {
-    //       return this.checkIncludes(course.description.toUpperCase(), text)
-    //     }))
-    // }
-
-    // workingList = workingList.filter(courses => courses.length !== 0)
-    // return workingList
   }
 
-  /**helper function for handleSearchFilter
-   * takes a string and an array of strings and see if string contains the elements of the array
-   * @param string description
-   * @param array words
-   * @returns boolean
-   */
   checkIncludes = (description, words) => {
     return words.reduce((acc, cur) => {
       if (!description.includes(cur)) {

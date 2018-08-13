@@ -18,9 +18,14 @@ app.get('/:year/:term', async ({ params: { year, term } }, res) => {
     const courses = await fs.readJson(pathToFile)
     res.send(courses)
   } else {
-    const courses = await getCoursesInTerm(year, term)
-    res.send(courses)
-    fs.writeJson(pathToFile, courses)
+    try {
+      const courses = await getCoursesInTerm(year, term)
+      res.send(courses)
+      fs.writeJson(pathToFile, courses)
+    } catch (e) {
+      res.status(404)
+      res.send(`${year}${term} courses are currently not available. Please try in the future.`)
+    }
   }
 })
 
