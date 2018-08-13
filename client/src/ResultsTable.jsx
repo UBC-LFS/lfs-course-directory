@@ -18,7 +18,7 @@ class ResultsTable extends React.Component {
           </tr>
         </thead>
         <tbody>
-          {this.props.resultCourses.map(course => {
+          {this.props.filteredCourses.map(course => {
             return (
               course.map(coursesByDept => {
                 return (

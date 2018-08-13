@@ -23,11 +23,6 @@ const options = [
   { value: 'SOIL', label:'SOIL'},
 ]
 
-// const yearTerms = [
-//   { value: '2018W', label: '2018 Winter'},
-//   { value: '2018S', label: '2018 Summer'}
-// ]
-
 const getYear = () => {
   const date = new Date()
   return date.getFullYear()
@@ -41,7 +36,7 @@ class App extends React.Component {
       availableTerms: [],
       selectedYearTerm: {},
       syllabi: false,
-      resultCourses: [],
+      filteredCourses: [],
       selectedDept: null,
       selectionDepts: [],
       searchBar: false
@@ -50,10 +45,9 @@ class App extends React.Component {
 
   componentDidMount () {
     this.populateYearTerms()
-    this.getCoursesForTerm(this.state.selectedYearTerm.year, this.state.selectedYearTerm.term)
   }
 
-  populateYearTerms = () => {
+  populateYearTerms = async () => {
     let year = getYear()
     let prevYear = year - 1
     let nextYear = year + 1
@@ -67,25 +61,26 @@ class App extends React.Component {
       { value: { year: prevYear, term: 'S' }, label: prevYear + ' Summer' }
     ]
 
-    this.setState({
+    await this.setState({
       availableTerms: yearAndTerms,
       selectedYearTerm: { year, term: 'W' }
     })
+    this.getCoursesForTerm(this.state.selectedYearTerm.year, this.state.selectedYearTerm.term)
   }
 
   getCoursesForTerm = async (year, term) => {
-    // const courses = await fetch(`http://localhost:8081/${year}/${term}`)
-    //   .then(x => x.json())
+    const courses = await fetch(`http://localhost:8081/${year}/${term}`)
+      .then(x => x.json())
     
     if (term === 'W') {
       this.setState({
         courses: exampleInputW,
-        resultCourses: exampleInputW
+        filteredCourses: exampleInputW
       })
     } else {
       this.setState({
         courses: exampleInputS,
-        resultCourses: exampleInputS
+        filteredCourses: exampleInputS
       })
     }
   }
@@ -94,17 +89,7 @@ class App extends React.Component {
     await this.setState({
       selectedYearTerm: event.value
     })
-    // if (event.value === '2018W') {
-    //   await this.setState({
-    //     selectedYearTerm: event.value
-    //   })
-    // } else if (event.value === '2018S') {
-    //   await this.setState({
-    //     selectedYearTerm: '2018S'
-    //   })
-    // }
     this.getCoursesForTerm(this.state.selectedYearTerm.year, this.state.selectedYearTerm.term)
-
     this.handleChange()
   }
 
@@ -239,9 +224,9 @@ class App extends React.Component {
       workingList = this.handleSearchFilter(workingList)
     }
 
-    // set resultCourses: masterList
+    // set filteredCourses: masterList
     this.setState({
-      resultCourses: workingList
+      filteredCourses: workingList
     })
   }
 
@@ -294,7 +279,7 @@ class App extends React.Component {
         </Row>
         <Row>
           <ResultsTable 
-            resultCourses={this.state.resultCourses}
+            filteredCourses={this.state.filteredCourses}
             syllabi={this.state.syllabi}/>
         </Row>
       </Grid>
