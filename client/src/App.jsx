@@ -140,15 +140,19 @@ class App extends React.Component {
     let textArray = this.state.searchBar
     const firstWord = textArray[0]
 
+    const moreThanTwoWords = textArray.length > 2
+    const exactlyTwoWords = textArray[1]
 
-    if (textArray.length > 2) {
+    if (moreThanTwoWords) {
       return workingList
-        .map(courses => courses.filter(course => this.checkIncludes(course.description.toUpperCase(), textArray)))
+        .map(courses => courses
+          .filter(course => textArray
+            .every(word => course.description.toUpperCase().includes(word))))
         .filter(courses => courses.length !== 0)
     }
 
-    else if (textArray[1]) {
-      const secondWord = textArray[1]
+    else if (exactlyTwoWords) {
+      const secondWord = exactlyTwoWords
       return workingList
         .map(courses => courses.filter(course => ((course.dept.includes(firstWord) || course.dept.includes(secondWord))
           && (course.course.includes(firstWord) || course.course.includes(secondWord)))
@@ -163,15 +167,6 @@ class App extends React.Component {
           || course.description.toUpperCase().includes(firstWord)))
         .filter(courses => courses.length !== 0)
     }
-  }
-
-  checkIncludes = (description, words) => {
-    return words.reduce((acc, cur) => {
-      if (!description.includes(cur)) {
-        acc = false
-      }
-      return acc
-    }, true)
   }
 
   handleChange = () => {
