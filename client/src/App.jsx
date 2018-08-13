@@ -201,7 +201,7 @@ class App extends React.Component {
       <Grid>
         <Row className='show-grid'>
           <Col>
-            <h2>Course Directory</h2>
+            <h2>LFS Course Directory</h2>
           </Col>
         </Row>
         <Row><br /></Row>
