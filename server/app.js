@@ -12,7 +12,6 @@ app.use((req, res, next) => {
 
 // this logic needs to be checked out, could be problematic...
 app.get('/:year/:term', async ({ params: { year, term } }, res) => {
-  console.log(year, term)
   const pathToFile = path.join(__dirname, `courseFiles/${year}${term}.JSON`)
   const fileExists = await fs.pathExists(pathToFile)
   if (fileExists) {
