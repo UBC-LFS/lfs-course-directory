@@ -235,7 +235,7 @@ class App extends React.Component {
               <th>Session <Select
                 className='basic-single'
                 classNamePrefix='select'
-                defaultValue={this.state.availableTerms[0]}
+                defaultValue={this.state.availableTerms[2]}
                 options={this.state.availableTerms}
                 onChange={this.handleYearTerm}
               />
