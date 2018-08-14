@@ -44,10 +44,11 @@ class App extends React.Component {
     }
   }
 
-  componentDidMount() {
-    this.getAvailableSyllabi()
+  async componentDidMount() {
+    const availableSyllabi = await this.getAvailableSyllabi()
+      
     this.populateYearTerms()
-      .then(({ year, term }) => this.getCoursesForTerm(year, term))
+      .then(({ year, term }) => this.getCoursesForTerm(year, term, availableSyllabi))
   }
 
   populateYearTerms = async () => {
@@ -70,7 +71,7 @@ class App extends React.Component {
     return { year, term: 'W' }
   }
 
-  getCoursesForTerm = async (year, term) => {
+  getCoursesForTerm = async (year, term, availableSyllabi) => {
     const response = await fetch(`http://localhost:8081/${year}/${term}`)
     if (response.status === 404) {
       this.setState({
@@ -79,11 +80,18 @@ class App extends React.Component {
     }
     else {
       const allCourses = flatten(await response.json())
-      // this.availableSyllabi.forEach(({ term, courses }) => {
-      //   courses.forEach(course => {
-      //     allCourses.forEach(({  }))
-      //   })
-      // })
+      
+      const deptSectionKey = allCourses.map(({ dept, course }) => dept + course)
+
+      availableSyllabi.forEach(({ term, courses }) => {
+        courses.forEach(courseName => {
+          const index = deptSectionKey.findIndex(key => key === courseName)
+          if (index !== -1) {
+            allCourses[index].syllabi = `http://localhost:8080/syllabi/${term}/${courseName}`
+          }
+        })
+      })
+
       this.setState({
         invalidYearTerm: false,
         courses: allCourses,
@@ -95,17 +103,17 @@ class App extends React.Component {
   getAvailableSyllabi = async () => {
     const availableSyllabi = await fetch(`http://localhost:8080/availableSyllabi`)
       .then(x => x.json())
-
     this.setState({
       availableSyllabi
     })
+    return availableSyllabi
   }
 
   handleYearTerm = async event => {
     await this.setState({
       selectedYearTerm: event.value
     })
-    await this.getCoursesForTerm(this.state.selectedYearTerm.year, this.state.selectedYearTerm.term)
+    await this.getCoursesForTerm(this.state.selectedYearTerm.year, this.state.selectedYearTerm.term, this.state.availableSyllabi)
     this.handleChange()
   }
 
