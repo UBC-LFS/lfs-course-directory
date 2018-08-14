@@ -174,26 +174,25 @@ class App extends React.Component {
 
     if (moreThanTwoWords) {
       return workingList
-        .map(courses => courses
-          .filter(course => textArray
-            .every(word => course.description.toUpperCase().includes(word))))
+        .filter(course => textArray
+          .every(word => course.description.toUpperCase().includes(word)))
         .filter(courses => courses.length !== 0)
     }
 
     else if (exactlyTwoWords) {
       const secondWord = exactlyTwoWords
       return workingList
-        .map(courses => courses.filter(course => ((course.dept.includes(firstWord) || course.dept.includes(secondWord))
+        .filter(course => ((course.dept.includes(firstWord) || course.dept.includes(secondWord))
           && (course.course.includes(firstWord) || course.course.includes(secondWord)))
-          || (course.description.toUpperCase().includes(firstWord) && course.description.toUpperCase().includes(secondWord))))
+          || (course.description.toUpperCase().includes(firstWord) && course.description.toUpperCase().includes(secondWord)))
         .filter(courses => courses.length !== 0)
     }
 
     else {
       return workingList
-        .map(courses => courses.filter(course => course.dept.includes(firstWord)
+        .filter(course => course.dept.includes(firstWord)
           || course.course.includes(firstWord)
-          || course.description.toUpperCase().includes(firstWord)))
+          || course.description.toUpperCase().includes(firstWord))
         .filter(courses => courses.length !== 0)
     }
   }
@@ -269,6 +268,7 @@ class App extends React.Component {
             placeholder="Search a course code... (ex: FNH 200)">
           </FormControl>
         </Row>
+        <Row><br /></Row>
         <Row>
           {this.state.invalidYearTerm ? <p>Unfortunately, this year and term are not available at the moment.</p> :
             <ResultsTable
