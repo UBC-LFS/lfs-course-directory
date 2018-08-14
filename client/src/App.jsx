@@ -82,7 +82,7 @@ class App extends React.Component {
       const allCourses = flatten(await response.json())
       
       const deptSectionKey = allCourses.map(({ dept, course }) => dept + course)
-
+      
       availableSyllabi.forEach(({ term, courses }) => {
         courses.forEach(courseName => {
           const index = deptSectionKey.findIndex(key => key === courseName)
@@ -91,6 +91,7 @@ class App extends React.Component {
           }
         })
       })
+
 
       this.setState({
         invalidYearTerm: false,
