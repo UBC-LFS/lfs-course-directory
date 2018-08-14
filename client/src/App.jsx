@@ -265,7 +265,7 @@ class App extends React.Component {
         </Table>
         <Row>
           Search <FormControl type="text" inputRef={el => this.searchbar = el} onChange={this.handleSearchUpdate}
-            placeholder="Search a course code... (ex: FNH 200)">
+            placeholder="Search a course or description">
           </FormControl>
         </Row>
         <Row><br /></Row>
