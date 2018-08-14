@@ -6,6 +6,7 @@ import './App.css'
 import ToggleButton from 'react-toggle-button'
 import Select from 'react-select'
 import ResultsTable from './ResultsTable'
+import { flatten } from 'ramda'
 
 const options = [
   { value: '-', label: '-' },
@@ -38,11 +39,13 @@ class App extends React.Component {
       selectedDept: null,
       selectionDepts: [],
       searchBar: false,
-      invalidYearTerm: false
+      invalidYearTerm: false,
+      availableSyllabi: []
     }
   }
 
   componentDidMount() {
+    this.getAvailableSyllabi()
     this.populateYearTerms()
       .then(({ year, term }) => this.getCoursesForTerm(year, term))
   }
@@ -75,13 +78,27 @@ class App extends React.Component {
       })
     }
     else {
-      const courses = await response.json()
+      const allCourses = flatten(await response.json())
+      // this.availableSyllabi.forEach(({ term, courses }) => {
+      //   courses.forEach(course => {
+      //     allCourses.forEach(({  }))
+      //   })
+      // })
       this.setState({
         invalidYearTerm: false,
-        courses: courses,
-        filteredCourses: courses
+        courses: allCourses,
+        filteredCourses: allCourses
       })
     }
+  }
+
+  getAvailableSyllabi = async () => {
+    const availableSyllabi = await fetch(`http://localhost:8080/availableSyllabi`)
+      .then(x => x.json())
+
+    this.setState({
+      availableSyllabi
+    })
   }
 
   handleYearTerm = async event => {

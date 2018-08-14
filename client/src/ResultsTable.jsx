@@ -20,24 +20,20 @@ class ResultsTable extends React.Component {
         <tbody>
           {this.props.filteredCourses.map(course => {
             return (
-              course.map(coursesByDept => {
-                return (
-                  <tr key={coursesByDept.dept + coursesByDept.course + coursesByDept.description + coursesByDept.syllabus}>
-                    <th style={{ fontWeight: 'normal' }}>
-                      {coursesByDept.dept}
-                    </th>
-                    <th style={{ fontWeight: 'normal' }}>
-                      {coursesByDept.course}
-                    </th>
-                    <th style={{ fontWeight: 'normal' }}>
-                      {coursesByDept.description}
-                    </th>
-                    <th style={{ fontWeight: 'normal' }}>
-                      {coursesByDept.syllabus}
-                    </th>
-                  </tr>
-                )
-              })
+              <tr key={course.dept + course.course + course.description + course.syllabus}>
+                <th style={{ fontWeight: 'normal' }}>
+                  {course.dept}
+                </th>
+                <th style={{ fontWeight: 'normal' }}>
+                  {course.course}
+                </th>
+                <th style={{ fontWeight: 'normal' }}>
+                  {course.description}
+                </th>
+                <th style={{ fontWeight: 'normal' }}>
+                  {course.syllabus}
+                </th>
+              </tr>
             )
           })}
         </tbody>
