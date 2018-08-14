@@ -272,8 +272,7 @@ class App extends React.Component {
         <Row>
           {this.state.invalidYearTerm ? <p>Unfortunately, this year and term are not available at the moment.</p> :
             <ResultsTable
-              filteredCourses={this.state.filteredCourses}
-              syllabi={this.state.syllabi} />
+              filteredCourses={this.state.filteredCourses}/>
           }
         </Row>
       </Grid>

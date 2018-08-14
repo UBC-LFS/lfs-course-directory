@@ -1,10 +1,6 @@
 import React from 'react'
 import { Table } from 'react-bootstrap'
-/*
-* Props: courses - list of courses to render
-* Renders a table of courses with links to their syllabi
-*/
-// `<a href='https://courses.students.ubc.ca/cs/main?pname=subjarea&tname=subjareas&req=3&dept=${dept}&course=${course}'>${dept} ${course}</a>`,
+
 class ResultsTable extends React.Component {
   render() {
     return (
