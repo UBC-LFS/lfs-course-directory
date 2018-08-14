@@ -10,6 +10,8 @@ app.use((req, res, next) => {
   next()
 })
 
+app.use(express.static(path.join(__dirname, './public/build')))
+
 // this logic needs to be checked out, could be problematic...
 app.get('/:year/:term', async ({ params: { year, term } }, res) => {
   const pathToFile = path.join(__dirname, `courseFiles/${year}${term}.JSON`)
