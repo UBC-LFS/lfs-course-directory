@@ -129,7 +129,7 @@ class App extends React.Component {
   }
 
   handleSyllabi = workingList => workingList
-    .map(courses => courses.filter(({ syllabus }) => syllabus))
+    .filter(({ syllabus }) => syllabus)
     .filter(courses => courses.length !== 0)
 
   handleSelectionEvent = async event => {
@@ -146,7 +146,7 @@ class App extends React.Component {
   }
 
   handleSelection = workingList => workingList
-    .map(courses => courses.filter(({ dept }) => dept === this.state.selectedDept))
+    .filter(({ dept }) => dept === this.state.selectedDept)
     .filter(courses => courses.length !== 0)
 
   handleSearchUpdate = async () => {
