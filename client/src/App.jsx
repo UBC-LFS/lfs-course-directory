@@ -87,7 +87,10 @@ class App extends React.Component {
         courses.forEach(courseName => {
           const index = deptSectionKey.findIndex(key => key === courseName)
           if (index !== -1) {
-            allCourses[index].syllabus = `http://localhost:8080/syllabi/${term}/${courseName}`
+            allCourses[index].syllabus = {
+              term,
+              courseName
+            }
           }
         })
       })
