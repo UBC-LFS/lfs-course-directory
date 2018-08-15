@@ -225,7 +225,7 @@ class App extends React.Component {
         <Row className='show-grid'>
           <Col>
             <h2>LFS Course Directory</h2>
-            <p>Please note that the syllabi shown here are subject to change.</p>
+            <p>Please note the Session displays the courses offered in the selected Session, but the syllabus shows the most up-to-date syllabus, and is for reference purposes only. </p>
           </Col>
         </Row>
         <Row><br /></Row>
