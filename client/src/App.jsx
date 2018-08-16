@@ -105,7 +105,7 @@ class App extends React.Component {
   }
 
   getAvailableSyllabi = async () => {
-    const availableSyllabi = await fetch(`http://localhost:10080/availableSyllabi`)
+    const availableSyllabi = await fetch(`http://localhost:10081/availableSyllabi`)
       .then(x => x.json())
     this.setState({
       availableSyllabi
