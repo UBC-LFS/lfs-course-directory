@@ -36,6 +36,7 @@ app.get('/lfscourses/:year/:term', async ({ params: { year, term } }, res) => {
 app.get('/lfscourses/availableSyllabi/', async (req, res) => {
   const availableSyllabi = await fetch('http://localhost:10082/availableSyllabi')
     .then(x => x.json())
+  console.log(availableSyllabi)
   res.send(availableSyllabi)
 })
 
