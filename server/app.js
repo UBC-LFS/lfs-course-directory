@@ -12,7 +12,7 @@ app.use((req, res, next) => {
 
 app.use(express.static(path.join(__dirname, './public/build')))
 
-app.get('/:year/:term', async ({ params: { year, term } }, res) => {
+app.get('/lfscourses/:year/:term', async ({ params: { year, term } }, res) => {
   const pathToFile = path.join(__dirname, `courseFiles/${year}${term}.JSON`)
   const fileExists = await fs.pathExists(pathToFile)
   if (fileExists) {
