@@ -1,3 +1,6 @@
+/* global fetch */
+
+require('isomorphic-fetch')
 const express = require('express')
 const getCoursesInTerm = require('./getCoursesInTerm')
 const path = require('path')
@@ -28,6 +31,12 @@ app.get('/lfscourses/:year/:term', async ({ params: { year, term } }, res) => {
       res.send(`${year}${term} courses are currently not available. Please try in the future.`)
     }
   }
+})
+
+app.get('/lfscourses/', async (req, res) => {
+  const availableSyllabi = await fetch('http://localhost:10082/availableSyllabi')
+    .then(x => x.json())
+  res.send(availableSyllabi)
 })
 
 module.exports = app
