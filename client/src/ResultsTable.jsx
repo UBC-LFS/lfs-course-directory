@@ -15,7 +15,7 @@ class ResultsTable extends React.Component {
         <tbody>
           {this.props.filteredCourses.map(course => {
             const link = `https://courses.students.ubc.ca/cs/main?pname=subjarea&tname=subjareas&req=3&dept=${course.dept}&course=${course.course}`
-            const syllabusLink = course.syllabus ? `http://localhost:8080/syllabi/${course.syllabus.term}/${course.syllabus.courseName}` : ''
+            const syllabusLink = course.syllabus ? `http://prod-lc01-pub.landfood.ubc.ca/lfssyllabi/syllabi/${course.syllabus.term}/${course.syllabus.courseName}` : ''
             return (
               <tr key={course.course + course.dept + course.description + course.syllabus}>
                 <th style={{ fontWeight: 'normal' }}>
