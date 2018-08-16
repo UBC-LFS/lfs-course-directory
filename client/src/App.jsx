@@ -72,7 +72,7 @@ class App extends React.Component {
   }
 
   getCoursesForTerm = async (year, term, availableSyllabi) => {
-    const response = await fetch(`http://localhost:8081/${year}/${term}`)
+    const response = await fetch(`http://localhost:10081/${year}/${term}`)
     if (response.status === 404) {
       this.setState({
         invalidYearTerm: true
@@ -105,7 +105,7 @@ class App extends React.Component {
   }
 
   getAvailableSyllabi = async () => {
-    const availableSyllabi = await fetch(`http://localhost:8080/availableSyllabi`)
+    const availableSyllabi = await fetch(`http://localhost:10080/availableSyllabi`)
       .then(x => x.json())
     this.setState({
       availableSyllabi
