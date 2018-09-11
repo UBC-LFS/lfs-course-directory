@@ -16,7 +16,8 @@
   "homepage": "http://prod-lc01-pub.landfood.ubc.ca/lfscourses/",
   "scripts": {
     "start": "react-scripts start",
-    "build": "rm -rf ../server/public/build && react-scripts build && mv build ../server/public",
+    "dev": "rm -rf ../server/public/build && REACT_APP_CANVAS_SYLLABUS_URL=http://localhost:10082 react-scripts build && mv build ../server/public",
+    "prod": "rm -rf ../server/public/build && REACT_APP_CANVAS_SYLLABUS_URL=http://prod-lc01-pub.landfood.ubc.ca react-scripts build && mv build ../server/public",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject"
   }
