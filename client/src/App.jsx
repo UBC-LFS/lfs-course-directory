@@ -85,6 +85,13 @@ class App extends React.Component {
       
       availableSyllabi.forEach(({ term, courses }) => {
         courses.forEach(courseName => {
+          // Handle newer term course codes
+          splitCourseName = courseName.split(' ')
+          if (splitCourseName.length > 1) {
+            let dept = splitCourseName[0]
+            let courseCode = splitCourseName[1]
+            courseName = dept + courseCode
+          }
           const index = deptSectionKey.findIndex(key => key === courseName)
           if (index !== -1) {
             allCourses[index].syllabus = {
