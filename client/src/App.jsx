@@ -80,16 +80,26 @@ class App extends React.Component {
     }
     else {
       const allCourses = flatten(await response.json())
-      
+
       const deptSectionKey = allCourses.map(({ dept, course }) => dept + course)
-      
+
+      console.log(allCourses.length)
       availableSyllabi.forEach(({ term, courses }) => {
         courses.forEach(courseName => {
+          // Handle newer term course codes
+          let splitCourseName = courseName.split(' ')
+          let originalCourseName = courseName
+          if (splitCourseName.length > 1) {
+            let dept = splitCourseName[0]
+            let courseCode = splitCourseName[1]
+            courseName = dept + courseCode
+          }
           const index = deptSectionKey.findIndex(key => key === courseName)
           if (index !== -1) {
             allCourses[index].syllabus = {
               term,
-              courseName
+              courseName,
+              originalCourseName
             }
           }
         })

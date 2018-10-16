@@ -9,8 +9,6 @@
 # production
 /build
 
-# ignore build files
-public/
 
 # misc
 .DS_Store
