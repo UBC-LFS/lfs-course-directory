@@ -52,7 +52,7 @@ class App extends React.Component {
   }
 
   populateYearTerms = async () => {
-    const year = getYear()
+    const year = getYear() - 1
     const prevYear = year - 1
     const nextYear = year + 1
 
