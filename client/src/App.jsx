@@ -27,6 +27,22 @@ const getYear = () => {
   return date.getFullYear()
 }
 
+const getCurrentMonth = () => {
+  const date = new Date()
+  return date.getMonth()
+}
+
+const getDefaultYearTerm = () => {
+  const yr = getYear()
+
+  if (getCurrentMonth() <= 1) {
+    const thisYr = yr - 1
+    return thisYr
+  }
+  else {
+    return yr
+  }
+}
 class App extends React.Component {
   constructor(props) {
     super(props)
@@ -52,7 +68,7 @@ class App extends React.Component {
   }
 
   populateYearTerms = async () => {
-    const year = getYear()
+    const year = getDefaultYearTerm()
     const prevYear = year - 1
     const nextYear = year + 1
 
@@ -245,7 +261,7 @@ class App extends React.Component {
               <th>Session <Select
                 className='basic-single'
                 classNamePrefix='select'
-                defaultValue={this.state.availableTerms[2]}
+                defaultValue={this.state.availableTerms[4]}
                 options={this.state.availableTerms}
                 onChange={this.handleYearTerm}
               />
