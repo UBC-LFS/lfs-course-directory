@@ -1,6 +1,6 @@
 {
-  "short_name": "React App",
-  "name": "Create React App Sample",
+  "short_name": "LFS Course Directory",
+  "name": "LFS Course Directory",
   "icons": [
     {
       "src": "favicon.ico",
