@@ -33,16 +33,14 @@ const getCurrentMonth = () => {
 }
 
 const getDefaultYearTerm = () => {
-  const yr = getYear()
-
-  if (getCurrentMonth() <= 1) {
-    const thisYr = yr - 1
-    return thisYr
+  const year = getYear()
+  const month = getCurrentMonth() + 1
+  if (month <= 4) {
+    return { year: year - 1, month }
   }
-  else {
-    return yr
-  }
+  return { year: year, month }
 }
+
 class App extends React.Component {
   constructor(props) {
     super(props)
@@ -68,7 +66,7 @@ class App extends React.Component {
   }
 
   populateYearTerms = async () => {
-    const year = getDefaultYearTerm()
+    const { year, month } = getDefaultYearTerm()
     const prevYear = year - 1
     const nextYear = year + 1
 
@@ -80,11 +78,19 @@ class App extends React.Component {
       { value: { year: prevYear, term: 'W' }, label: prevYear + ' Winter' },
       { value: { year: prevYear, term: 'S' }, label: prevYear + ' Summer' }
     ]
+
+    let selectYearTerm = {}
+    if ( (month >= 1 && month <= 4) || (month >= 9 && month <= 12) ) {
+      selectYearTerm = { 'year': year + 1, term: 'S' }
+    } else {
+      selectYearTerm = { 'year': year, term: 'W' }
+    }
+    
     this.setState({
       availableTerms: yearAndTerms,
-      selectedYearTerm: { year, term: 'W' }
+      selectedYearTerm: selectYearTerm
     })
-    return { year, term: 'W' }
+    return selectYearTerm
   }
 
   getCoursesForTerm = async (year, term, availableSyllabi) => {
@@ -99,7 +105,6 @@ class App extends React.Component {
 
       const deptSectionKey = allCourses.map(({ dept, course }) => dept + course)
 
-      console.log(allCourses.length)
       availableSyllabi.forEach(({ term, courses }) => {
         courses.forEach(courseName => {
           // Handle newer term course codes
